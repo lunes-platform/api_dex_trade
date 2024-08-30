@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        // mocha runs in node, which uses commonjs modules
+        "module": "CommonJs",
+        "strict": true,
+        "target": "es6",
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+    }
+}

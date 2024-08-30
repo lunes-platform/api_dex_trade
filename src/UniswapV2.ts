@@ -468,6 +468,7 @@ export const removeLiquidityNative = async (
             throw new Error(output?.toHuman()?.toString() || 'Revert');
         }
     }
+    console.log('out', output?.toHuman())
     await new Promise<string>((resolve, reject) => {
         contract.tx['router::removeLiquidityNative']({
             gasLimit: gasRequired,
@@ -738,17 +739,18 @@ export const estimativeRemoveToken = async (
     if (!lpToken) {
         throw new Error("LP token not found");
     }
-    const balance_liquidity = await lpToken.query.balanceOf(signer.address)
-    const supply = await lpToken.query.totalSupply()
-    const balance_0 = await token_0.query.balanceOf(lpToken.address)
-    const balance_1 = await token_1.query.balanceOf(lpToken.address)
+    const balance_liquidity = (await lpToken.query.balanceOf(signer.address)).value.ok?.toNumber() || 0
+    const supply = (await lpToken.query.totalSupply()).value.ok?.toNumber() || 0
+    const balance_0 = (await token_0.query.balanceOf(lpToken.address)).value.ok?.toNumber() || 0
+    const balance_1 = (await token_1.query.balanceOf(lpToken.address)).value.ok?.toNumber() || 0
 
-    const estimative_recovery_0 = (Number(balance_liquidity.value.ok) || 0 * Number(balance_0.value.ok) || 0) / Number(supply.value.ok || 0)
-    const estimative_recovery_1 = (Number(balance_liquidity.value.ok) || 0 * Number(balance_1.value.ok) || 0) / Number(supply.value.ok || 0)
-
+    const estimative_recovery_0 = Math.round(((balance_liquidity * balance_0) / supply))
+    const estimative_recovery_1 = Math.round((balance_liquidity * balance_1) / supply)
+    const fee_0 = Math.round((estimative_recovery_0 * 0.08) / 100)
+    const fee_1 = Math.round((estimative_recovery_1 * 0.08) / 100)
     return {
-        balance_recovery_0: estimative_recovery_0,
-        balance_recovery_1: estimative_recovery_1
+        balance_recovery_0: estimative_recovery_0 - fee_0,
+        balance_recovery_1: estimative_recovery_1 - fee_1
     }
 }
 /**

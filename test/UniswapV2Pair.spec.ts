@@ -2,7 +2,7 @@ import { ApiPromise } from '@polkadot/api';
 import { KeyringPair } from '@polkadot/keyring/types';
 import setupApi from '../globalSetup';
 import { expect } from "chai";
-import { addLiquidityAsset, addLiquidityNative, balanceToken, myBalanceLiquidity, priceTokenInt, priceTokenOut, removeLiquidityNative, removeLiquidityToken, reservesLPToken, swapNativeForExactToken, swapTokensForExactTokens } from '../src/UniswapV2';
+import { addLiquidityAsset, addLiquidityNative, balanceToken, estimativeRemoveToken, myBalanceLiquidity, priceTokenInt, priceTokenOut, removeLiquidityNative, removeLiquidityToken, reservesLPToken, swapNativeForExactToken, swapTokensForExactTokens } from '../src/UniswapV2';
 describe('UniswapV2Pair', () => {
     let api: ApiPromise;
     let wallet: KeyringPair;
@@ -62,19 +62,21 @@ describe('UniswapV2Pair', () => {
         expect(balance_before).to.not.equal(balance_after)
     })
 
-    it('can  remove liquidity native', async () => {
-        const balance_after = await myBalanceLiquidity(api, wallet, 'LUNES', 'UP')
-        expect(balance_after.liquidity).to.not.equal(0)
-        await removeLiquidityNative(api, wallet, 'UP', balance_after.liquidity, 0, 0)
-        const balance_before = await myBalanceLiquidity(api, wallet, 'LUNES', 'UP')
-        expect(balance_before.liquidity).to.not.equal(balance_after.liquidity)
-    })
-
     it('can  remove liquidity assets', async () => {
         const balance_after = await myBalanceLiquidity(api, wallet, 'UP', 'USDT')
         expect(balance_after.liquidity).to.not.equal(0)
         await removeLiquidityToken(api, wallet, 'UP', 'USDT', balance_after.liquidity, 0, 0)
         const balance_before = await myBalanceLiquidity(api, wallet, 'UP', 'USDT')
+        expect(balance_before.liquidity).to.not.equal(balance_after.liquidity)
+    })
+
+    it('can  remove liquidity native', async () => {
+        const balance_after = await myBalanceLiquidity(api, wallet, 'LUNES', 'UP')
+        expect(balance_after.liquidity).to.not.equal(0)
+        const estimativeRemovePerToken = await estimativeRemoveToken(api, wallet, 'LUNES', 'UP')
+        console.log(estimativeRemovePerToken)
+        await removeLiquidityNative(api, wallet, 'UP', balance_after.liquidity, 0, 0)
+        const balance_before = await myBalanceLiquidity(api, wallet, 'LUNES', 'UP')
         expect(balance_before.liquidity).to.not.equal(balance_after.liquidity)
     })
 })

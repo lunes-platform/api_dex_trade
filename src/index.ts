@@ -10,15 +10,17 @@ const COINS = {
 };
 
 const SYNC_INTERVAL = 600 * 1000; // 1 hour
-
+let isActive = false;
 async function syncLiquidityPools(api: ApiPromise, wallet: KeyringPair) {
     try {
+        if (isActive) return;
+        isActive = true;
         console.log('Sincronizando LPs');
-        const amount_0 = Math.floor(Math.random() * (9999999999 - 100000000 + 1)) + 100000000;
-        const amount_1 = Math.floor(Math.random() * (9999999999 - 100000000 + 1)) + 100000000;
-        await addLiquidityNative(api, wallet, COINS.UP, amount_0, 0, amount_1, 0)
-        await addLiquidityNative(api, wallet, COINS.USDT, amount_0, 0, amount_1, 0)
-        await addLiquidityAsset(api, wallet, COINS.UP, COINS.USDT, amount_0, 0, amount_1, 0)
+        //const amount_0 = Math.floor(Math.random() * (9999999999 - 100000000 + 1)) + 100000000;
+        //const amount_1 = Math.floor(Math.random() * (9999999999 - 100000000 + 1)) + 100000000;
+        //await addLiquidityNative(api, wallet, COINS.UP, amount_0, 0, amount_1, 0)
+        // await addLiquidityNative(api, wallet, COINS.USDT, amount_0, 0, amount_1, 0)
+        //await addLiquidityAsset(api, wallet, COINS.UP, COINS.USDT, amount_0, 0, amount_1, 0)
         console.log('Syncing LPs');
         await syncLP(api, wallet, COINS.UP, COINS.USDT);
         await syncLP(api, wallet, COINS.UP, COINS.LUNES);
@@ -34,6 +36,7 @@ async function syncLiquidityPools(api: ApiPromise, wallet: KeyringPair) {
         prices = await priceTokenOut(api, wallet, COINS.LUNES, COINS.USDT, amount)
         await swapNativeForExactToken(api, wallet, COINS.USDT, prices.amount1, amount);
         console.log('done');
+        isActive = false;
 
     } catch (error) {
         console.error('Erro ao sincronizar LPs:', error);
