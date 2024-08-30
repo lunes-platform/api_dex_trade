@@ -1,0 +1,23 @@
+[
+    {
+        "name": "LUNES",
+        "symbol": "LUNES",
+        "address": "5EcNb7bvquP6DBNxjiUp8BWy2vKZSHMTGGqatmYEJk2TLEmh",
+        "decimals": 8,
+        "isNative": true
+    },
+    {
+        "name": "Lunes USDT",
+        "symbol": "USDT",
+        "address": "5CfxMfLYQBdfasFK4ff9ZSu7ccAZChhQa3uuj2bVtAkY3f7c",
+        "decimals": 6,
+        "isNative": false
+    },
+    {
+        "name": "Lunes UP",
+        "symbol": "UP",
+        "address": "5EebLQJ2LHyMXpDV1n4WQEa8WT4kKM71PcG1gZawZDbov915",
+        "decimals": 8,
+        "isNative": false
+    }
+]

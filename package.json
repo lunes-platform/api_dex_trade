@@ -1,0 +1,26 @@
+{
+  "name": "dex_trade_lunex",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --config mocha/.mocharc.jsonc --timeout 1000000",
+    "start": "ts-node src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@727-ventures/typechain-compiler": "^1.1.4",
+    "@727-ventures/typechain-types": "^1.1.2",
+    "dotenv": "^16.4.5"
+  }
+}
